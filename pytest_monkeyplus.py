@@ -45,3 +45,27 @@ class monkeyplus(monkeypatch):
         delta = today - new_today
         self.setattr(time, 'time', lambda: time_now - (delta.days * 24 * 60 * 60))
     
+    def patch_time_ticking(self, force_int_diff=False):
+        """Patches time.time() and ensures that it never returns the same value each time it's
+        called.
+        
+        If force_int_diff is True, the minimum difference between time() result is 1.
+        """
+        if hasattr(self, '_time_before_ticking_patch'):
+            # Already patched, do nothing.
+            return
+        self._last_time_tick = time.time()
+        if force_int_diff:
+            self._last_time_tick = int(self._last_time_tick)
+        self._time_before_ticking_patch = time.time
+        
+        def fake_time():
+            result = self._time_before_ticking_patch()
+            if force_int_diff:
+                result = int(result)
+            if result <= self._last_time_tick:
+                result = self._last_time_tick + 1
+            self._last_time_tick = result
+            return result
+        
+        self.setattr(time, 'time', fake_time)

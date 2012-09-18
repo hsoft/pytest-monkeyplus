@@ -2,13 +2,14 @@
 pytest-monkeyplus - monkeypatch with extras
 ===========================================
 
-The ``monkkeyplus`` plugin is a funcarg that subclasses ``monkeypatch`` and adds 
+The ``monkeyplus`` plugin is a funcarg that subclasses ``monkeypatch`` and adds 
 a few extra features to it.
 
 Extra features
 --------------
 
-``monkeyplus`` has two extra methods: ``patch_osstat`` and ``patch_today``.
+``monkeyplus`` has three extra methods: ``patch_osstat``, ``patch_today`` and
+``patch_time_ticking``.
 
 ``patch_osstat(path, **osstat_attrs)``
 
@@ -32,6 +33,14 @@ value are non-trivial, so it can get boring to repeat. Call ``patch_today`` with
 the date you'd like the app to be patched to, example::
 
     monkeyplus.patch_today(2011, 2, 16)
+
+``patch_time_ticking(force_int_diff=False)``
+
+This monkeypatch ensures that all ``time.time()`` calls yield different results (and increasing). On
+many platforms, this is already guaranteed, but not on all of them.
+
+If ``force_int_diff`` is True, the patch ensures that all ``int(time.time())`` calls yield different
+results. Note that it also means that the patches function will return ``int`` values.
 
 Replacing monkeypatch
 ---------------------

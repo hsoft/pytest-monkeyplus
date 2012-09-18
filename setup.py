@@ -7,12 +7,14 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3',
 ]
 
+LONG_DESC = open('README', 'rt').read() + '\n\n' + open('CHANGES', 'rt').read()
+
 setup(
     name='pytest-monkeyplus',
     description="pytest's monkeypatch subclass with extra functionalities",
-    long_description=open('README').read(),
+    long_description=LONG_DESC,
     classifiers=CLASSIFIERS,
-    version='1.0.0',
+    version='1.1.0',
     author='Virgil Dupras',
     author_email='hsoft@hardcoded.net',
     url='http://bitbucket.org/hsoft/pytest-monkeyplus/',
